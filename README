@@ -1,0 +1,32 @@
+Create an virtual environment 
+python -m venv venv
+
+Activate the virtual environment 
+.\venv\Scripts\activate
+
+Install django
+pip install django
+
+Check django version
+django-admin --version
+
+Create a django project
+django-admin startproject RealEststeAgent
+
+direct to the project folder
+cd RealEststeAgent
+
+Create an app
+python manage.py startapp customapp
+
+Register the app in settings.py
+INSTALLED_APPS = [
+    'customapp',
+]
+
+
+
+
+
+
+

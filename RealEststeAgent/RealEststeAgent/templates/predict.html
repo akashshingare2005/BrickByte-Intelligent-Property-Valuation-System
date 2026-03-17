@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict House Price</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        input,
+        select {
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            grid-column: 1 / -1;
+            padding: 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .result-box {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            background-color: #e8f8f5;
+            border: 2px solid #1abc9c;
+        }
+
+        .price {
+            font-size: 28px;
+            color: #27ae60;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .score {
+            font-size: 20px;
+            color: #8e44ad;
+            font-weight: bold;
+        }
+
+        .home-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #7f8c8d;
+            text-decoration: none;
+        }
+
+        .visualizations {
+            margin-top: 40px;
+            border-top: 2px solid #ecf0f1;
+            padding-top: 20px;
+        }
+
+        .vis-img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <a href="{% url 'index' %}" class="home-link">&larr; Return to Home</a>
+        <h1>Real Estate Price Predictor AI</h1>
+        <p style="text-align: center; color: #7f8c8d;">Enter the property details below to get an AI-powered Market
+            Price Prediction & Investment Score.</p>
+
+        <form method="POST" action="{% url 'predict' %}">
+            {% csrf_token %}
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>City</label>
+                    <select name="city" required>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Pune">Pune</option>
+                        <option value="Bangalore">Bangalore</option>
+                        <option value="Nagpur">Nagpur</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Locality Tier</label>
+                    <select name="locality_tier" required>
+                        <option value="Budget">Budget</option>
+                        <option value="Mid">Mid</option>
+                        <option value="Premium">Premium</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>BHK</label>
+                    <input type="number" name="bhk" placeholder="e.g. 2" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Bathrooms</label>
+                    <input type="number" name="bathrooms" placeholder="e.g. 2" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Built-up Area (sqft)</label>
+                    <input type="number" step="0.1" name="super_area" placeholder="e.g. 1200" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Carpet Area (sqft)</label>
+                    <input type="number" step="0.1" name="carpet_area" placeholder="e.g. 950" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Property Age (Years)</label>
+                    <input type="number" name="property_age" placeholder="e.g. 5" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Distance to Metro (km)</label>
+                    <input type="number" step="0.1" name="metro_dist" placeholder="e.g. 2.0" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Distance to City Center (km)</label>
+                    <input type="number" step="0.1" name="city_center_dist" placeholder="e.g. 8.0" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Parking Available?</label>
+                    <select name="parking" required>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Lift Available?</label>
+                    <select name="lift" required>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Gated Society?</label>
+                    <select name="gated" required>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Furnishing Status</label>
+                    <select name="furnishing" required>
+                        <option value="Unfurnished">Unfurnished</option>
+                        <option value="Semi-Furnished">Semi-Furnished</option>
+                        <option value="Fully-Furnished">Fully-Furnished</option>
+                    </select>
+                </div>
+
+                <button type="submit">Analyze & Predict Price</button>
+            </div>
+        </form>
+
+        {% if error %}
+        <div class="error-box"
+            style="background-color: #fce4e4; border: 1px solid #fcc2c3; padding: 15px; margin-top: 20px; border-radius: 4px; color: #cc0033;">
+            <h2>Prediction Failed</h2>
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+
+        {% if price %}
+        <div class="result-box">
+            <h2>Prediction Results</h2>
+            <div class="price">Predicted Value: {{ price }}</div>
+            <div class="score">Investment Rating: {{ score }}</div>
+        </div>
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>

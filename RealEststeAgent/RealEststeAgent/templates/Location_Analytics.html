@@ -1,0 +1,453 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>JobEntry - Job Portal Website Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="{% static 'img/favicon.ico' %}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-fliud bg-white p-0">
+        <!-- Spinner Start -->
+        <div id="spinner"
+            class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Navbar Start -->
+        <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+            <a href="{% url 'index' %}" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
+                <h1 class="m-0 text-primary">EstateIQ</h1>
+            </a>
+            <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse"
+                data-bs-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto p-4 p-lg-0">
+                    <a href="{% url 'index' %}" class="nav-item nav-link">Home</a>
+
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Insights</a>
+                        <div class="dropdown-menu rounded-0 m-0">
+                            <a href="{% url 'compare_properties' %}" class="dropdown-item">Compare Properties</a>
+                            <a href="{% url 'market_trends' %}" class="dropdown-item">Market Trends</a>
+                            <a href="{% url 'investment_insights' %}" class="dropdown-item">Investment Insights</a>
+                            <a href="{% url 'location_analytics' %}" class="dropdown-item">Location Analytics</a>
+                            <a href="{% url 'emi_calculator' %}" class="dropdown-item">EMI Calculator</a>
+                        </div>
+                    </div>
+
+                    <a href="{% url 'about_project' %}" class="nav-item nav-link">About Project</a>
+                    <a href="{% url 'predict' %}" class="nav-item nav-link">Predict Price</a>
+                    <a href="{% url 'contact' %}" class="nav-item nav-link">Contact</a>
+                </div> {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Logout<i
+                        class="fa fa-arrow-right ms-3"></i></a>
+                {% else %}
+                <a href="{% url 'login' %}" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Login<i
+                        class="fa fa-arrow-right ms-3"></i></a>
+                {% endif %}
+            </div>
+        </nav>
+        <!-- Navbar End -->
+
+        <!-- Header Start -->
+        <div class="container-xxl py-5 bg-dark page-header mb-5">
+            <div class="container my-5 pt-5 pb-4">
+                <h1 class="display-3 text-white mb-3 animated slideInDown">Location Analytics</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb text-uppercase">
+                        <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                        <li class="breadcrumb-item text-white active" aria-current="page">Location Analytics</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!-- Header End -->
+
+        <div class="container-fluid py-5" style="background-color: #f8f9fa;">
+            <div class="row px-4">
+                
+                <!-- LEFT SIDEBAR: Filters -->
+                <div class="col-lg-3 col-md-4 mb-4">
+                    <div class="card shadow-sm border-0 rounded-3">
+                        <div class="card-header bg-primary text-white text-center">
+                            <h5 class="mb-0 text-white"><i class="fa fa-filter me-2"></i>Dashboard Filters</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="filterForm">
+                                <div class="mb-4 pb-3 border-bottom border-primary">
+                                    <label class="form-label fw-bold text-primary"><i class="fa fa-eye me-2"></i>Parameter to Visualize</label>
+                                    <select class="form-select border-primary shadow-sm" id="visualParam" onchange="fetchDashboardData()">
+                                        <option value="avg_price" selected>Average Price (₹)</option>
+                                        <option value="avg_price_sqft">Price per Sqft (₹)</option>
+                                        <option value="avg_bhk">Average BHK</option>
+                                        <option value="crime_rate">Crime Rate Index</option>
+                                        <option value="city_center_dist">Distance to City Center (km)</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Global Analytics Panel (Moved from Right Side) -->
+                    <div class="card shadow-sm border-0 rounded-3 mt-4 bg-dark text-white">
+                        <div class="card-header border-bottom border-secondary text-center py-3">
+                            <h5 class="mb-0 text-white"><i class="fa fa-chart-pie me-2"></i>Global Insights</h5>
+                            <div class="text-secondary small">Based on your filters</div>
+                        </div>
+                        <div class="card-body d-flex flex-column justify-content-between p-4">
+                            
+                            <div class="text-center mb-4">
+                                <h3 class="text-primary fw-bold mb-0" id="panelGlobalAvg">--</h3>
+                                <span class="text-uppercase tracking-wide small text-muted">Overall Average</span>
+                            </div>
+
+                            <ul class="list-group list-group-flush bg-transparent">
+                                <li class="list-group-item bg-transparent text-white border-secondary d-flex justify-content-between align-items-center px-0">
+                                    <span><i class="fa fa-arrow-up me-2 text-danger"></i>Highest City</span>
+                                    <div class="text-end">
+                                        <strong id="panelHighestCity" class="d-block">--</strong>
+                                        <small id="panelHighestValue" class="text-muted">--</small>
+                                    </div>
+                                </li>
+                                <li class="list-group-item bg-transparent text-white border-secondary d-flex justify-content-between align-items-center px-0">
+                                    <span><i class="fa fa-arrow-down me-2 text-success"></i>Lowest City</span>
+                                    <div class="text-end">
+                                        <strong id="panelLowestCity" class="d-block">--</strong>
+                                        <small id="panelLowestValue" class="text-muted">--</small>
+                                    </div>
+                                </li>
+                            </ul>
+                            
+                            <div class="mt-4 p-3 border border-secondary rounded" style="background: rgba(255,255,255,0.05);">
+                                <h6 class="text-primary"><i class="fa fa-robot me-2"></i>AI Insight</h6>
+                                <p class="small text-light mb-0" id="panelAiInsight">Select filters to generate insights.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CENTER & RIGHT: Map & Panel -->
+                <div class="col-lg-9 col-md-8">
+                    
+                    <!-- Top Section: Map & Analytics Panel -->
+                    <div class="row mb-4">
+                        <div class="col-lg-12">
+                            <div class="card shadow-sm border-0 rounded-3 h-100">
+                                <div class="card-body p-2 position-relative">
+                                    <div id="analyticsMap" style="height: 650px; border-radius: 6px;"></div>
+                                    <div class="position-absolute top-0 end-0 m-3 z-index-top" style="z-index: 999;">
+                                        <div class="form-check form-switch bg-white p-2 rounded shadow-sm">
+                                            <input class="form-check-input ms-0 me-2" type="checkbox" id="heatmapToggle" onchange="toggleHeatmap()">
+                                            <label class="form-check-label fw-bold" for="heatmapToggle">Show Heatmap</label>
+                                        </div>
+                                    </div>
+                                    <div class="position-absolute bottom-0 start-0 m-3 p-2 bg-white rounded shadow-sm" style="z-index: 999; font-size: 12px; width: 140px;">
+                                        <div class="fw-bold mb-1 border-bottom pb-1">Avg Price</div>
+                                        <div><i style="background:green; width:12px; height:12px; float:left; margin-right:5px; border-radius:50%;"></i> Affordable</div>
+                                        <div><i style="background:goldenrod; width:12px; height:12px; float:left; margin-right:5px; border-radius:50%;"></i> Mid-Range</div>
+                                        <div><i style="background:red; width:12px; height:12px; float:left; margin-right:5px; border-radius:50%;"></i> Expensive</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Map and Analytics Panel End -->
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Start -->
+        <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
+            <div class="container py-5">
+                <div class="row g-5">
+                    <div class="col-lg-3 col-md-6">
+                        <h5 class="text-white mb-4">Company</h5>
+                        <a class="btn btn-link text-white-50" href="">About Us</a>
+                        <a class="btn btn-link text-white-50" href="">Contact Us</a>
+                        <a class="btn btn-link text-white-50" href="">Our Services</a>
+                        <a class="btn btn-link text-white-50" href="">Privacy Policy</a>
+                        <a class="btn btn-link text-white-50" href="">Terms & Condition</a>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h5 class="text-white mb-4">Quick Links</h5>
+                        <a class="btn btn-link text-white-50" href="">About Us</a>
+                        <a class="btn btn-link text-white-50" href="">Contact Us</a>
+                        <a class="btn btn-link text-white-50" href="">Our Services</a>
+                        <a class="btn btn-link text-white-50" href="">Privacy Policy</a>
+                        <a class="btn btn-link text-white-50" href="">Terms & Condition</a>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h5 class="text-white mb-4">Contact</h5>
+                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
+                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
+                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                        <div class="d-flex pt-2">
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="copyright">
+                    <div class="row">
+                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                            &copy; <a class="border-bottom" href="#">Your Site Name</a>, All Right Reserved.
+
+                            <!--/*** The author’s attribution link must remain intact in the template. ***/-->
+                            <!--/*** If you wish to remove this credit link, please purchase the Pro Version . ***/-->
+                            Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
+                        </div>
+                        <div class="col-md-6 text-center text-md-end">
+                            <div class="footer-menu">
+                                <a href="">Home</a>
+                                <a href="">Cookies</a>
+                                <a href="">Help</a>
+                                <a href="">FQAs</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End -->
+
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'lib/wow/wow.min.js' %}"></script>
+    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+    
+    <!-- Leaflet & Chart.js -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <!-- Dashboard Logic -->
+    <script>
+        // Number format formatter
+        const inrFormat = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+
+        // Init Map
+        var map = L.map('analyticsMap').setView([20.5937, 78.9629], 5); // Center on India
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://carto.com/">CartoDB</a>'
+        }).addTo(map);
+
+        var markersLayer = L.layerGroup().addTo(map);
+        var heatLayer = null;
+        var isHeatmapVisible = false;
+
+
+
+        function toggleHeatmap() {
+            isHeatmapVisible = document.getElementById('heatmapToggle').checked;
+            if (isHeatmapVisible) {
+                if (heatLayer) map.addLayer(heatLayer);
+            } else {
+                if (heatLayer) map.removeLayer(heatLayer);
+            }
+        }
+
+        // Helper to format values elegantly based on type
+        function formatParamValue(val, paramKey) {
+            if (paramKey.includes('price')) return inrFormat.format(val);
+            if (paramKey.includes('bhk') || paramKey.includes('crime')) return val.toFixed(1);
+            if (paramKey.includes('dist')) return val.toFixed(1) + ' km';
+            return val.toString();
+        }
+
+        function getParamDisplayName(paramKey) {
+            const map = {
+                'avg_price': 'Average Price',
+                'avg_price_sqft': 'Price per Sqft',
+                'avg_bhk': 'Average BHK',
+                'crime_rate': 'Crime Rate Index',
+                'city_center_dist': 'Dist to City Center'
+            };
+            return map[paramKey] || paramKey;
+        }
+
+        function fetchDashboardData() {
+            const queryParams = new URLSearchParams({});
+
+            const visParam = document.getElementById('visualParam').value;
+
+            fetch(`/api/location-analytics-data/?${queryParams.toString()}`)
+                .then(res => res.json())
+                .then(data => {
+                    const cities_data = data.cities_data;
+                    const scatter_data = data.scatter_data;
+
+                    markersLayer.clearLayers();
+                    if(heatLayer) map.removeLayer(heatLayer);
+
+                    if (!cities_data || cities_data.length === 0) {
+                        document.getElementById('panelGlobalAvg').textContent = "--";
+                        document.getElementById('panelHighestCity').textContent = "--";
+                        document.getElementById('panelHighestValue').textContent = "--";
+                        document.getElementById('panelLowestCity').textContent = "--";
+                        document.getElementById('panelLowestValue').textContent = "--";
+                        document.getElementById('panelAiInsight').textContent = "No data available for these filters.";
+                        return; // Exit early if no data
+                    }
+
+                    // 1. Calculate dynamic parameter stats
+                    let paramValues = cities_data.map(c => c[visParam]);
+                    let pMin = Math.min(...paramValues);
+                    let pMax = Math.max(...paramValues);
+                    let pAvg = paramValues.reduce((a, b) => a + b, 0) / paramValues.length;
+                    
+                    // Ranges: 33% and 66% points
+                    let pRange = pMax - pMin;
+                    let p33 = pMin + (pRange * 0.33);
+                    let p66 = pMin + (pRange * 0.66);
+
+                    // Sort to find highest and lowest cities
+                    let sortedCities = [...cities_data].sort((a, b) => b[visParam] - a[visParam]);
+                    let highestCity = sortedCities[0];
+                    let lowestCity = sortedCities[sortedCities.length - 1];
+
+                    // 2. Map and layer generation
+                    let heatData = [];
+                    let labels = [], prices = [], sqftPrices = [];
+
+                    cities_data.forEach(c => {
+                        let cVal = c[visParam];
+                        
+                        labels.push(c.city);
+                        prices.push(c.avg_price);
+                        sqftPrices.push(c.avg_price_sqft);
+
+                        // Map node intensity to selected parameter for heatmap
+                        // Normalize intensity between 0.1 and 1.0 based on param bounds
+                        let intensity = pRange === 0 ? 0.5 : 0.1 + (0.9 * ((cVal - pMin) / pRange));
+                        heatData.push([c.lat, c.lng, intensity]);
+
+                        // Determine circle color (Green -> Low, Yellow -> Med, Red -> High)
+                        let cColor = 'green';
+                        if (cVal > p33 && cVal <= p66) cColor = 'goldenrod';
+                        else if (cVal > p66) cColor = 'red';
+
+                        // Invert color logic for "good" parameters like price if desired, 
+                        // but sticking to standard intensity for generic mapping mostly: Blue -> Red.
+                        // Actually, user requested Low -> Green, Med -> Yellow, High -> Red.
+
+                        // Dynamic Radius (min 10, max 40)
+                        let radius = pRange === 0 ? 20 : Math.max(10, Math.min(40, 10 + (30 * ((cVal - pMin) / pRange))));
+
+                        let paramDisplay = getParamDisplayName(visParam);
+                        let valFormat = formatParamValue(cVal, visParam);
+
+                        let marker = L.circleMarker([c.lat, c.lng], {
+                            radius: radius,
+                            fillColor: cColor,
+                            color: cColor,
+                            weight: 1,
+                            opacity: 1,
+                            fillOpacity: 0.6
+                        });
+
+                        marker.bindTooltip(`
+                            <div style="font-size: 14px;">
+                                <strong class="text-primary">${c.city}</strong><hr class="m-1 dropdown-divider">
+                                <span class="text-muted small">Showing: ${paramDisplay}</span><br>
+                                <span style="font-size: 18px; font-weight: 800; color: ${cColor};">${valFormat}</span>
+                                <hr class="m-1 dropdown-divider">
+                                <span class="small">Total Properties: <b>${c.count}</b></span><br>
+                                <span class="small">Avg Price: <b>${inrFormat.format(c.avg_price)}</b></span>
+                            </div>
+                        `);
+                        marker.addTo(markersLayer);
+                    });
+
+                    // Build Heatmap Layer
+                    heatLayer = L.heatLayer(heatData, {radius: 40, blur: 25, maxZoom: 10});
+                    if (isHeatmapVisible) heatLayer.addTo(map);
+
+                    // 3. Update Global Panel
+                    document.getElementById('panelGlobalAvg').textContent = formatParamValue(pAvg, visParam);
+                    document.getElementById('panelHighestCity').textContent = highestCity.city;
+                    document.getElementById('panelHighestValue').textContent = formatParamValue(highestCity[visParam], visParam);
+                    document.getElementById('panelLowestCity').textContent = lowestCity.city;
+                    document.getElementById('panelLowestValue').textContent = formatParamValue(lowestCity[visParam], visParam);
+
+                    // Generate AI Insight
+                    let insight = "";
+                    if (visParam === 'crime_rate') {
+                        insight = `City with lowest crime (${lowestCity.city}) presents a safer baseline for high-potential, family-friendly property investments.`;
+                    } else if (visParam === 'city_center_dist') {
+                        insight = `${lowestCity.city} properties have the closest proximity to city centers, driving higher rental yields but increasing acquisition costs.`;
+                    } else if (visParam === 'avg_price_sqft') {
+                        insight = `${highestCity.city} commands peak premium pricing. Target ${lowestCity.city} for affordable market entry and emerging growth.`;
+                    } else {
+                        insight = `Significant variance in ${getParamDisplayName(visParam)} observed. Markets around ${formatParamValue(pAvg, visParam)} represent balanced risk/reward opportunities.`;
+                    }
+                    document.getElementById('panelAiInsight').textContent = insight;
+
+
+
+                    // Optional: auto-adjust bounds if desired
+                    // var group = new L.featureGroup(markersLayer.getLayers());
+                    // map.fitBounds(group.getBounds().pad(0.1));
+                })
+                .catch(err => console.error("Error fetching analytics data:", err));
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchDashboardData();
+        });
+    </script>
+</body>
+
+</html>
