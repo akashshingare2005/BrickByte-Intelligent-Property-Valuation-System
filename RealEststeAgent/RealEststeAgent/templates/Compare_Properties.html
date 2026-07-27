@@ -47,7 +47,7 @@
                         <!-- Navbar Start -->
         <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
             <a href="{% url 'index' %}" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
-                <h1 class="m-0 text-primary">EstateIQ</h1>
+                <h1 class="m-0 text-primary">BrickByte</h1>
             </a>
             <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse"
                 data-bs-target="#navbarCollapse">
@@ -157,7 +157,7 @@
                             <div class="position-relative overflow-hidden">
                                 <a href="#"><img class="img-fluid w-100" src="{% static 'img/property-1.jpg' %}" alt=""></a>
                                 <div class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">{{ property.Furnishing|default:"Unfurnished" }}</div>
-                                <div class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">{{ property.Locality_Tier|default:"Tier 1" }}</div>
+                                <div class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3 tier-pill-soft">{{ property.Locality_Tier|default:"Tier 1" }}</div>
                             </div>
                             <div class="p-4 pb-0">
                                 <h5 class="text-primary mb-3">₹{{ property.Market_Price_INR|intcomma }}</h5>
@@ -230,7 +230,7 @@
             <div class="container py-5">
                 <div class="row g-5">
                     <div class="col-lg-3 col-md-6">
-                        <h5 class="text-white mb-4">EstateIQ</h5>
+                        <h5 class="text-white mb-4">BrickByte</h5>
                         <p>The ultimate AI-driven real estate platform for predictive pricing, comprehensive insights,
                             and smarter investments.</p>
                     </div>
@@ -244,9 +244,9 @@
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <h5 class="text-white mb-4">Contact</h5>
-                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Tech Park, Bangalore, India</p>
-                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+91 98765 43210</p>
-                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@estateiq.com</p>
+                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Shivajinagar, Pune, Maharashtra, India</p>
+                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>9689861125</p>
+                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>akashshingare217@gmail.com</p>
                         <div class="d-flex pt-2">
                             <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
                             <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
@@ -260,7 +260,7 @@
                 <div class="copyright">
                     <div class="row">
                         <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                            &copy; <a class="border-bottom" href="#">EstateIQ</a>, All Right Reserved. 
+                            &copy; <a class="border-bottom" href="#">BrickByte</a>, All Right Reserved.
                         </div>
                         <div class="col-md-6 text-center text-md-end">
                             <div class="footer-menu">

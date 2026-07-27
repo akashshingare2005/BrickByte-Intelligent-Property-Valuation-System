@@ -126,6 +126,18 @@
         <form method="POST" action="{% url 'predict' %}">
             {% csrf_token %}
             <div class="form-grid">
+                <div class="form-group" style="grid-column: 1 / -1; margin-bottom: 10px;">
+                    <label>Select ML Model</label>
+                    <select name="model_choice" required style="background-color: #f0f7ff; border: 1.5px solid #3498db;">
+                        <option value="rf">Random Forest Regressor (RFR - Classic)</option>
+                        <option value="xgboost">XGBoost Regressor (High Performance)</option>
+                        <option value="lightgbm">LightGBM Regressor (Fast & Accurate)</option>
+                        <option value="gradient_boosting">Gradient Boosting (Robust)</option>
+                        <option value="extra_trees">Extra Trees Regressor (Stable)</option>
+                        <option value="default">Default Model (Balanced)</option>
+                    </select>
+                </div>
+
                 <div class="form-group">
                     <label>City</label>
                     <select name="city" required>
@@ -231,6 +243,12 @@
             <h2>Prediction Results</h2>
             <div class="price">Predicted Value: {{ price }}</div>
             <div class="score">Investment Rating: {{ score }}</div>
+            {% if model_name %}
+            <div style="margin-top: 15px; font-size: 14px; color: #7f8c8d; border-top: 1px solid #1abc9c; padding-top: 10px;">
+                Using <strong>{{ model_name|title }}</strong> Model 
+                {% if accuracy %}| Accuracy: <strong>{{ accuracy|floatformat:2 }}%</strong>{% endif %}
+            </div>
+            {% endif %}
         </div>
         {% endif %}
 

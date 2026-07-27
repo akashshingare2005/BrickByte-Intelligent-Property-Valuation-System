@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>EstateIQ - AI Powered Real Estate Platform</title>
+    <title>BrickByte - AI Powered Real Estate Platform</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -34,10 +34,10 @@
 
     <style>
         :root {
-            --primary: #00B98E;
-            --secondary: #1A374D;
-            --light: #EFFDF5;
-            --dark: #2B3940;
+            --primary: #0f4c81;
+            --secondary: #ff8a5b;
+            --light: #f6f8fc;
+            --dark: #101828;
         }
 
         .text-primary {
@@ -49,14 +49,27 @@
         }
 
         .btn-primary {
-            background-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), #124f8f);
             border-color: var(--primary);
             color: #fff;
+            box-shadow: 0 12px 24px rgba(15, 76, 129, .22);
         }
 
         .btn-primary:hover {
-            background-color: #009c77;
-            border-color: #009c77;
+            background: linear-gradient(135deg, #124f8f, #0b3b66);
+            border-color: #0b3b66;
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary), #ff6f3d);
+            border-color: var(--secondary);
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #ff6f3d, #f45d2a);
+            border-color: #f45d2a;
             color: #fff;
         }
 
@@ -87,7 +100,7 @@
         <!-- Navbar Start -->
         <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
             <a href="{% url 'index' %}" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
-                <h1 class="m-0 text-primary">EstateIQ</h1>
+                <h1 class="m-0 text-primary">BrickByte</h1>
             </a>
             <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse"
                 data-bs-target="#navbarCollapse">
@@ -112,13 +125,13 @@
                     <a href="{% url 'predict' %}" class="nav-item nav-link">Predict Price</a>
                     <a href="{% url 'contact' %}" class="nav-item nav-link">Contact</a>
                 </div>
-                {% if user.is_authenticated %}
+                {% comment %} {% if user.is_authenticated %}
                 <a href="{% url 'logout' %}" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Logout<i
                         class="fa fa-arrow-right ms-3"></i></a>
                 {% else %}
                 <a href="{% url 'login' %}" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Login<i
                         class="fa fa-arrow-right ms-3"></i></a>
-                {% endif %}
+                {% endif %} {% endcomment %}
             </div>
         </nav>
         <!-- Navbar End -->
@@ -240,7 +253,7 @@
                     </div>
                     <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
                         <h1 class="mb-4">AI-Powered Real Estate Insights at Your Fingertips</h1>
-                        <p class="mb-4">EstateIQ empowers you to make smarter real estate decisions. Whether you are
+                        <p class="mb-4">BrickByte empowers you to make smarter real estate decisions. Whether you are
                             buying, selling, or investing, our platform provides advanced tools and analytics to guide
                             you.</p>
                         <p><i class="fa fa-check text-primary me-3"></i>Predict realistic property prices using Machine
@@ -261,13 +274,13 @@
         <div class="container-fluid py-5 bg-light">
             <div class="container">
                 <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
-                    <h1 class="mb-3">Why Choose EstateIQ?</h1>
+                    <h1 class="mb-3">Why Choose BrickByte?</h1>
                     <p>We leverage Data Science and AI to redefine how you interact with real estate. Dive into
                         comprehensive analytics designed for buyers and investors.</p>
                 </div>
                 <div class="row g-4">
                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="bg-white p-5 rounded h-100 shadow-sm border">
+                        <div class="bg-white p-5 rounded h-100 shadow-sm border feature-card-soft">
                             <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mb-4"
                                 style="width: 60px; height: 60px;">
                                 <i class="fa fa-brain fs-4"></i>
@@ -278,7 +291,7 @@
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                        <div class="bg-white p-5 rounded h-100 shadow-sm border">
+                        <div class="bg-white p-5 rounded h-100 shadow-sm border feature-card-soft">
                             <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mb-4"
                                 style="width: 60px; height: 60px;">
                                 <i class="fa fa-chart-pie fs-4"></i>
@@ -289,7 +302,7 @@
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                        <div class="bg-white p-5 rounded h-100 shadow-sm border">
+                        <div class="bg-white p-5 rounded h-100 shadow-sm border feature-card-soft">
                             <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mb-4"
                                 style="width: 60px; height: 60px;">
                                 <i class="fa fa-shield-alt fs-4"></i>
@@ -306,74 +319,12 @@
 
 
 
-        <!-- Testimonial Start -->
-        <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
-            <div class="container">
-                <h1 class="text-center mb-5">What Our Buyers Say!!!</h1>
-                <div class="owl-carousel testimonial-carousel">
-                    <div class="testimonial-item bg-light rounded p-4 border shadow-sm">
-                        <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
-                        <p>The AI insights helped me find the perfect home at the right price. The price prediction tool
-                            gave me huge negotiating power.</p>
-                        <div class="d-flex align-items-center mt-3">
-                            <img class="img-fluid flex-shrink-0 rounded" src="{% static 'img/testimonial-1.jpg' %}"
-                                style="width: 50px; height: 50px;">
-                            <div class="ps-3">
-                                <h5 class="mb-1">Rahul Sharma</h5>
-                                <small>First-time Buyer</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="testimonial-item bg-light rounded p-4 border shadow-sm">
-                        <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
-                        <p>EstateIQ's market trends feature allowed me to pick a rapidly growing neighborhood. Best
-                            investment decision I've made.</p>
-                        <div class="d-flex align-items-center mt-3">
-                            <img class="img-fluid flex-shrink-0 rounded" src="{% static 'img/testimonial-2.jpg' %}"
-                                style="width: 50px; height: 50px;">
-                            <div class="ps-3">
-                                <h5 class="mb-1">Priya Desai</h5>
-                                <small>Real Estate Investor</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="testimonial-item bg-light rounded p-4 border shadow-sm">
-                        <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
-                        <p>Comparing properties side-by-side with data-driven analytics saved me hours of research.
-                            Highly recommended platform!</p>
-                        <div class="d-flex align-items-center mt-3">
-                            <img class="img-fluid flex-shrink-0 rounded" src="{% static 'img/testimonial-3.jpg' %}"
-                                style="width: 50px; height: 50px;">
-                            <div class="ps-3">
-                                <h5 class="mb-1">Amit Verma</h5>
-                                <small>Home Owner</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="testimonial-item bg-light rounded p-4 border shadow-sm">
-                        <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
-                        <p>Location analytics gave me the full picture of schools, hospitals, and transit before I even
-                            visited the property.</p>
-                        <div class="d-flex align-items-center mt-3">
-                            <img class="img-fluid flex-shrink-0 rounded" src="{% static 'img/testimonial-4.jpg' %}"
-                                style="width: 50px; height: 50px;">
-                            <div class="ps-3">
-                                <h5 class="mb-1">Sneha Gupta</h5>
-                                <small>Family Buyer</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Testimonial End -->
-
         <!-- Footer Start -->
         <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
             <div class="container py-5">
                 <div class="row g-5">
                     <div class="col-lg-3 col-md-6">
-                        <h5 class="text-white mb-4">EstateIQ</h5>
+                        <h5 class="text-white mb-4">BrickByte</h5>
                         <p>The ultimate AI-driven real estate platform for predictive pricing, comprehensive insights,
                             and smarter investments.</p>
                     </div>
@@ -387,9 +338,9 @@
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <h5 class="text-white mb-4">Contact</h5>
-                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Tech Park, Bangalore, India</p>
-                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+91 98765 43210</p>
-                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@estateiq.com</p>
+                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Shivajinagar, Pune, Maharashtra, India</p>
+                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>9689861125</p>
+                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>akashshingare217@gmail.com</p>
                         <div class="d-flex pt-2">
                             <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
                             <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
@@ -403,7 +354,7 @@
                 <div class="copyright">
                     <div class="row">
                         <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                            &copy; <a class="border-bottom" href="#">EstateIQ</a>, All Right Reserved.
+                            &copy; <a class="border-bottom" href="#">BrickByte</a>, All Right Reserved.
                         </div>
                         <div class="col-md-6 text-center text-md-end">
                             <div class="footer-menu">

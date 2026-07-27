@@ -48,7 +48,7 @@
         <!-- Navbar Start -->
         <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
             <a href="{% url 'index' %}" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
-                <h1 class="m-0 text-primary">EstateIQ</h1>
+                <h1 class="m-0 text-primary">BrickByte</h1>
             </a>
             <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse"
                 data-bs-target="#navbarCollapse">
@@ -99,133 +99,47 @@
 
         <div class="container-xxl py-5">
             <div class="container">
-                <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Investment Insights Dashboard</h1>
-                <p class="text-center text-muted mb-5">Analyze EstateIQ investment prospects and understand how property
-                    features affect pricing.</p>
+                <div class="section-shell mb-5 wow fadeInUp" data-wow-delay="0.1s">
+                    <span class="section-badge">Investor Focus</span>
+                    <h1 class="mb-3 text-center text-lg-start">Investment Insights Dashboard</h1>
+                    <p class="mb-0 text-center text-lg-start text-muted">Three core signals that shape pricing power,
+                        supply mix, and buyer preference.</p>
+                </div>
 
-                <div class="row g-5">
-                    <!-- 1. Bar Chart -->
-                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="rounded shadow p-4 bg-white h-100">
-                            <h4 class="mb-3">1. Average Property Price by City</h4>
+                <div class="row g-4">
+                    <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="analytics-card h-100">
+                            <span class="metric-kicker">01</span>
+                            <h4 class="mb-3">Average Property Price by City</h4>
                             <img src="{% static 'plots/dashboard/1_avg_price_by_city.png' %}"
-                                class="img-fluid rounded mb-3" alt="Bar Chart">
-                            <p class="text-muted small"><strong>Insight:</strong> This chart compares the average
-                                property prices across different cities. It helps identify which real estate markets are
-                                the most expensive or affordable overall.</p>
+                                class="img-fluid rounded-4 mb-3" alt="Average Property Price by City">
+                            <p class="text-muted mb-0"><strong>Insight:</strong> This chart compares average pricing
+                                across cities and quickly highlights the strongest premium markets.</p>
                         </div>
                     </div>
 
-                    <!-- 2. Histogram -->
-                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
-                        <div class="rounded shadow p-4 bg-white h-100">
-                            <h4 class="mb-3">2. Property Price Distribution</h4>
-                            <img src="{% static 'plots/dashboard/2_price_distribution.png' %}"
-                                class="img-fluid rounded mb-3" alt="Histogram">
-                            <p class="text-muted small"><strong>Insight:</strong> The histogram displays how market
-                                prices are distributed. A skewed distribution indicates whether most properties fall
-                                into affordable or luxury segments.</p>
-                        </div>
-                    </div>
-
-                    <!-- 3. Pie Chart -->
-                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="rounded shadow p-4 bg-white h-100">
-                            <h4 class="mb-3">3. Properties by BHK Type</h4>
+                    <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.3s">
+                        <div class="analytics-card h-100">
+                            <span class="metric-kicker">03</span>
+                            <h4 class="mb-3">Properties by BHK Type</h4>
                             <img src="{% static 'plots/dashboard/3_bhk_distribution.png' %}"
-                                class="img-fluid rounded mb-3" alt="Pie Chart">
-                            <p class="text-muted small"><strong>Insight:</strong> This pie chart shows the market share
-                                of different BHK configurations. It highlights what type of properties are most commonly
-                                available for buyers.</p>
+                                class="img-fluid rounded-4 mb-3" alt="Properties by BHK Type">
+                            <p class="text-muted mb-0"><strong>Insight:</strong> A quick view of inventory mix, showing
+                                which home configurations dominate the market.</p>
                         </div>
                     </div>
 
-                    <!-- 4. Box Plot -->
-                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
-                        <div class="rounded shadow p-4 bg-white h-100">
-                            <h4 class="mb-3">4. Price Range by BHK</h4>
-                            <img src="{% static 'plots/dashboard/4_price_by_bhk_box.png' %}"
-                                class="img-fluid rounded mb-3" alt="Box Plot">
-                            <p class="text-muted small"><strong>Insight:</strong> Box plots reveal the median, spread,
-                                and outliers of prices for each BHK category. It shows how much variation in price
-                                exists within the same home size.</p>
-                        </div>
-                    </div>
-
-                    <!-- 5. Scatter Plot -->
-                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="rounded shadow p-4 bg-white h-100">
-                            <h4 class="mb-3">5. Area vs. Market Price</h4>
-                            <img src="{% static 'plots/dashboard/5_area_vs_price_scatter.png' %}"
-                                class="img-fluid rounded mb-3" alt="Scatter Plot">
-                            <p class="text-muted small"><strong>Insight:</strong> This scatter plot shows the direct
-                                correlation between a property's total square footage and its price. Generally, larger
-                                areas command higher market values.</p>
-                        </div>
-                    </div>
-
-                    <!-- 6. Line Chart -->
-                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
-                        <div class="rounded shadow p-4 bg-white h-100">
-                            <h4 class="mb-3">6. Price vs. Property Age</h4>
-                            <img src="{% static 'plots/dashboard/6_price_vs_age_line.png' %}"
-                                class="img-fluid rounded mb-3" alt="Line Chart">
-                            <p class="text-muted small"><strong>Insight:</strong> The line chart tracks how the age of a
-                                property impacts its average price. It helps buyers understand depreciation trends over
-                                time.</p>
-                        </div>
-                    </div>
-
-                    <!-- 7. Heatmap -->
-                    <div class="col-lg-12 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="rounded shadow p-4 bg-white h-100">
-                            <h4 class="mb-3">7. Numeric Feature Correlation Heatmap</h4>
-                            <img src="{% static 'plots/dashboard/7_correlation_heatmap.png' %}"
-                                class="img-fluid rounded mb-3" alt="Heatmap">
-                            <p class="text-muted small"><strong>Insight:</strong> The heatmap visualizes the statistical
-                                relationship between all numerical features. A score closer to 1 or -1 means a strong
-                                positive or negative correlation with the property price.</p>
-                        </div>
-                    </div>
-
-                    <!-- 8. Stacked Bar Chart -->
-                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="rounded shadow p-4 bg-white h-100">
-                            <h4 class="mb-3">8. Parking by Locality Tier</h4>
-                            <img src="{% static 'plots/dashboard/8_parking_by_tier_stacked.png' %}"
-                                class="img-fluid rounded mb-3" alt="Stacked Bar Chart">
-                            <p class="text-muted small"><strong>Insight:</strong> This stacked bar chart compares
-                                parking availability across Budget, Mid, and Premium locality tiers, indicating if
-                                premium areas guarantee more parking.</p>
-                        </div>
-                    </div>
-
-                    <!-- 9. Bubble Chart -->
-                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
-                        <div class="rounded shadow p-4 bg-white h-100">
-                            <h4 class="mb-3">9. Area vs. Price (Bubble=Bathrooms)</h4>
-                            <img src="{% static 'plots/dashboard/9_price_vs_area_bubble.png' %}"
-                                class="img-fluid rounded mb-3" alt="Bubble Chart">
-                            <p class="text-muted small"><strong>Insight:</strong> A 3-dimensional view where x is area,
-                                y is price, and bubble size is the number of bathrooms. It shows how three features
-                                aggregate together.</p>
-                        </div>
-                    </div>
-
-                    <!-- 10. Count Plot -->
-                    <div class="col-lg-12 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="rounded shadow p-4 bg-white h-100 text-center">
-                            <h4 class="mb-3">10. Properties by Furnishing Status</h4>
+                    <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.5s">
+                        <div class="analytics-card h-100">
+                            <span class="metric-kicker">10</span>
+                            <h4 class="mb-3">Properties by Furnishing Status</h4>
                             <img src="{% static 'plots/dashboard/10_furnishing_count.png' %}"
-                                class="img-fluid rounded mx-auto d-block mb-3" style="max-width: 600px;"
-                                alt="Count Plot">
-                            <p class="text-muted small text-start"><strong>Insight:</strong> This count plot displays
-                                the total volume of Unfurnished, Semi-Furnished, and Fully-Furnished properties in the
-                                market available to buyers.</p>
+                                class="img-fluid rounded-4 mb-3" alt="Properties by Furnishing Status">
+                            <p class="text-muted mb-0"><strong>Insight:</strong> This count plot shows how much supply
+                                is available in unfurnished, semi-furnished, and fully-furnished segments.</p>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -251,9 +165,9 @@
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <h5 class="text-white mb-4">Contact</h5>
-                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
-                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
-                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Shivajinagar, Pune, Maharashtra, India</p>
+                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>9689861125</p>
+                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>akashshingare217@gmail.com</p>
                         <div class="d-flex pt-2">
                             <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
                             <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>

@@ -48,7 +48,7 @@
         <!-- Navbar Start -->
         <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
             <a href="{% url 'index' %}" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
-                <h1 class="m-0 text-primary">EstateIQ</h1>
+                <h1 class="m-0 text-primary">BrickByte</h1>
             </a>
             <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse"
                 data-bs-target="#navbarCollapse">
@@ -101,25 +101,38 @@
 
 
         <!-- Visualization Start -->
-        <div class="container-fliud py-5">
+        <div class="container-xxl py-5">
             <div class="container">
-                <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">City-wise Property Trends</h1>
-                <p class="text-center text-muted mb-4">Explore in-depth market distribution graphics and column insights
-                    compared against various prominent real estate cities natively generated from our dataset.</p>
-                <div class="row g-4">
+                <div class="section-shell mb-5 wow fadeInUp" data-wow-delay="0.1s">
+                    <span class="section-badge">Market Intelligence</span>
+                    <h1 class="mb-3">City-wise Property Trends</h1>
+                    <p class="mb-0 text-muted">A focused four-chart snapshot covering safety, pricing, transit, and locality tier.
+                    </p>
+                </div>
+                <div class="row g-4 analytics-grid">
                     {% if plot_images %}
                     {% for plot in plot_images %}
-                    <div class="col-lg-6 col-md-12 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="rounded shadow p-3 bg-white h-100 text-center">
-                            <h5 class="mb-3 text-primary">{{ plot.title }}</h5>
-                            <img src="{% static 'plots/market_trends/' %}{{ plot.filename }}" alt="{{ plot.title }}"
-                                class="img-fluid rounded">
+                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="analytics-card h-100">
+                            <div class="d-flex align-items-start justify-content-between gap-3 mb-3">
+                                <div>
+                                    <span class="metric-kicker">0{{ forloop.counter }}</span>
+                                    <h5 class="mb-1">{{ plot.title }}</h5>
+                                    <p class="text-muted mb-0">{{ plot.description }}</p>
+                                </div>
+                            </div>
+                            <div class="plot-frame">
+                                <img src="{% static 'plots/market_trends/' %}{{ plot.filename }}" alt="{{ plot.title }}"
+                                    class="img-fluid rounded-4 w-100">
+                            </div>
                         </div>
                     </div>
                     {% endfor %}
                     {% else %}
-                    <p class="text-center text-danger">No market trend visualizations found. Please ensure the pipeline
-                        generator successfully ran.</p>
+                    <div class="col-12">
+                        <div class="alert alert-warning mb-0">No market trend visualizations found. Please run the
+                            plot generation pipeline.</div>
+                    </div>
                     {% endif %}
                 </div>
             </div>
@@ -149,9 +162,9 @@
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <h5 class="text-white mb-4">Contact</h5>
-                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
-                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
-                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Shivajinagar, Pune, Maharashtra, India</p>
+                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>9689861125</p>
+                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>akashshingare217@gmail.com</p>
                         <div class="d-flex pt-2">
                             <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
                             <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>

@@ -46,7 +46,7 @@
                         <!-- Navbar Start -->
         <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
             <a href="{% url 'index' %}" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
-                <h1 class="m-0 text-primary">EstateIQ</h1>
+                <h1 class="m-0 text-primary">BrickByte</h1>
             </a>
             <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse"
                 data-bs-target="#navbarCollapse">
@@ -99,47 +99,51 @@
 
 
         <!-- Contact Start -->
-        <div class="container-fliud py-5">
+        <div class="container-xxl py-5">
             <div class="container">
-                <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Contact For Any Query</h1>
-                <div class="row g-4">
-                    <div class="col-12">
-                        <div class="row gy-4">
-                            <div class="col-md-4 wow fadeIn" data-wow-delay="0.1s">
-                                <div class="d-flex align-items-center bg-light rounded p-4">
-                                    <div class="bg-white border rounded d-flex flex-shrink-0 align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
-                                        <i class="fa fa-map-marker-alt text-primary"></i>
-                                    </div>
-                                    <span>123 Street, New York, USA</span>
-                                </div>
-                            </div>
-                            <div class="col-md-4 wow fadeIn" data-wow-delay="0.3s">
-                                <div class="d-flex align-items-center bg-light rounded p-4">
-                                    <div class="bg-white border rounded d-flex flex-shrink-0 align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
-                                        <i class="fa fa-envelope-open text-primary"></i>
-                                    </div>
-                                    <span>info@example.com</span>
-                                </div>
-                            </div>
-                            <div class="col-md-4 wow fadeIn" data-wow-delay="0.5s">
-                                <div class="d-flex align-items-center bg-light rounded p-4">
-                                    <div class="bg-white border rounded d-flex flex-shrink-0 align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
-                                        <i class="fa fa-phone-alt text-primary"></i>
-                                    </div>
-                                    <span>+012 345 6789</span>
-                                </div>
-                            </div>
+                <div class="section-shell text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">
+                    <span class="section-badge">Get In Touch</span>
+                    <h1 class="mb-3">Contact For Any Query</h1>
+                    <p class="mb-0 text-muted">Reach out for property analysis, investment guidance, or platform support.
+                    </p>
+                </div>
+                <div class="row g-4 mb-5">
+                    <div class="col-md-4 wow fadeIn" data-wow-delay="0.1s">
+                        <div class="contact-card h-100">
+                            <div class="contact-icon"><i class="fa fa-map-marker-alt"></i></div>
+                            <h5 class="mb-2">Address</h5>
+                            <p class="mb-0">Shivajinagar, Pune, Maharashtra, India</p>
                         </div>
                     </div>
-                    <div class="col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                        <iframe class="position-relative rounded w-100 h-100"
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3001156.4288297426!2d-78.01371936852176!3d42.72876761954724!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4ccc4bf0f123a5a9%3A0xddcfc6c1de189567!2sNew%20York%2C%20USA!5e0!3m2!1sen!2sbd!4v1603794290143!5m2!1sen!2sbd"
-                            frameborder="0" style="min-height: 400px; border:0;" allowfullscreen="" aria-hidden="false"
-                            tabindex="0"></iframe>
+                    <div class="col-md-4 wow fadeIn" data-wow-delay="0.3s">
+                        <div class="contact-card h-100">
+                            <div class="contact-icon"><i class="fa fa-envelope-open"></i></div>
+                            <h5 class="mb-2">Email</h5>
+                            <p class="mb-0">akashshingare217@gmail.com</p>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="wow fadeInUp" data-wow-delay="0.5s">
-                            <h4 class="mb-4">Receive messages instantly with our PHP and Ajax contact form - available in the <a href="https://htmlcodex.com/downloading/?item=2246">Pro Version</a> only.</h4>
+                    <div class="col-md-4 wow fadeIn" data-wow-delay="0.5s">
+                        <div class="contact-card h-100">
+                            <div class="contact-icon"><i class="fa fa-phone-alt"></i></div>
+                            <h5 class="mb-2">Phone</h5>
+                            <p class="mb-0">9689861125</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-4 align-items-stretch">
+                    <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="map-shell h-100">
+                            <iframe class="position-relative rounded-4 w-100 h-100"
+                                src="https://www.google.com/maps?q=Shivajinagar%2C%20Pune%2C%20Maharashtra%2C%20India&z=14&output=embed"
+                                frameborder="0" style="min-height: 420px; border:0;" allowfullscreen=""
+                                aria-hidden="false" tabindex="0"></iframe>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="contact-form-shell wow fadeInUp h-100" data-wow-delay="0.5s">
+                            <h4 class="mb-3">Send a direct message</h4>
+                            <p class="text-muted mb-4">Use the form below to share your requirements. We’ll respond with a
+                                focused recommendation.</p>
                             <form>
                                 <div class="row g-3">
                                     <div class="col-md-6">
@@ -201,9 +205,9 @@
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <h5 class="text-white mb-4">Contact</h5>
-                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
-                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
-                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>Shivajinagar, Pune, Maharashtra, India</p>
+                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>9689861125</p>
+                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>akashshingare217@gmail.com</p>
                         <div class="d-flex pt-2">
                             <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
                             <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>

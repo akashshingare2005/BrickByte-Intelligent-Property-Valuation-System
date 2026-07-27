@@ -21,14 +21,28 @@ def emi_calculator(request):
     return render(request, 'EMI_Calculator.html')
 
 def market_trends(request):
-    plots_dir = os.path.join(settings.BASE_DIR, 'RealEststeAgent', 'static', 'plots', 'market_trends')
-    plot_images = []
-    if os.path.exists(plots_dir):
-        for f in os.listdir(plots_dir):
-            if f.endswith('.png'):
-                # Extract clean title: "BHK_by_city.png" -> "Bhk By City" -> Drop "_by_city.png" -> "Bhk"
-                title_str = f.replace('_by_city.png', '').replace('_', ' ').title()
-                plot_images.append({'filename': f, 'title': title_str})
+    plot_images = [
+        {
+            'filename': 'Crime_Rate_Index_by_city.png',
+            'title': 'Crime Rate Index',
+            'description': 'Compare safety indicators across cities.',
+        },
+        {
+            'filename': 'Price_per_sqft_INR_by_city.png',
+            'title': 'Price per Sqft INR',
+            'description': 'See how property pricing scales across locations.',
+        },
+        {
+            'filename': 'Distance_to_Metro_km_by_city.png',
+            'title': 'Distance to Metro',
+            'description': 'Measure transit access by city.',
+        },
+        {
+            'filename': 'Locality_Tier_by_city.png',
+            'title': 'Location Tier',
+            'description': 'Understand premium, mid, and budget locality mix.',
+        },
+    ]
     return render(request, 'Market_Trends.html', {'plot_images': plot_images})
 
 from django.core.paginator import Paginator
@@ -324,10 +338,32 @@ def predict_house_price(request):
     if request.method == 'POST':
         # Load the saved ML model & Pipeline
         try:
-            model_path = os.path.join(settings.BASE_DIR, 'real_estate_model.pkl')
+            # Model mapping
+            model_files = {
+                'rf': 'real_estate_rf.pkl',
+                'xgboost': 'real_estate_xgboost.pkl',
+                'lightgbm': 'real_estate_lightgbm.pkl',
+                'gradient_boosting': 'real_estate_gradient_boosting.pkl',
+                'extra_trees': 'real_estate_extra_trees.pkl',
+                'default': 'real_estate_model.pkl'
+            }
+            
+            selected_model = request.POST.get('model_choice', 'default')
+            model_filename = model_files.get(selected_model, 'real_estate_model.pkl')
+            model_path = os.path.join(settings.BASE_DIR, model_filename)
+            
+            # Check if file exists, else fallback to default
+            if not os.path.exists(model_path):
+                model_filename = 'real_estate_model.pkl'
+                model_path = os.path.join(settings.BASE_DIR, model_filename)
+
             saved_data = joblib.load(model_path)
             model_pipeline = saved_data['pipeline']
             city_avg_price_sqft = saved_data['city_avg_prices']
+            
+            # Extract metadata for display
+            model_name_meta = saved_data.get('model_name', selected_model)
+            accuracy_meta = saved_data.get('accuracy', 0.0)
             
             # Extract form inputs 
             user_input = {
@@ -379,7 +415,9 @@ def predict_house_price(request):
             
             return render(request, 'predict.html', {
                 'price': formatted_price, 
-                'score': inv_score
+                'score': inv_score,
+                'model_name': model_name_meta,
+                'accuracy': accuracy_meta
             })
             
         except Exception as e:
