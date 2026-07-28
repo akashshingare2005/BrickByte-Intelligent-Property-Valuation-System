@@ -1,19 +1,39 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from django.contrib.auth import get_user_model
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_str
-from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import send_mail
-from django.urls import reverse
-from django.conf import settings
+from base64 import urlsafe_b64encode
+from binascii import Error as BinasciiError
 import os
+
+from django.conf import settings
+from django.contrib import messages
+from django.core.mail import send_mail
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+
+from .decorators import mongo_login_required
+from .mongo.auth import (
+    MongoAuthError,
+    authenticate_user,
+    clear_session_user,
+    consume_password_reset_token,
+    create_password_reset_token,
+    create_user,
+    get_session_user,
+    update_password,
+    update_user_profile,
+    validate_signup_payload,
+    set_session_user,
+)
 import joblib
 import pandas as pd
 
-User = get_user_model()
+
+def _build_password_reset_link(request, email: str, token: str) -> str:
+    """Build the same reset route the templates already expect."""
+    encoded_email = urlsafe_base64_encode(email.encode("utf-8"))
+    return request.build_absolute_uri(reverse('reset_password', kwargs={'uidb64': encoded_email, 'token': token}))
+
+
 def index(request):
     return render(request, 'index.html')
 
@@ -121,129 +141,151 @@ def download_report(request):
 def login(request):
     if request.method == 'POST':
         action = request.POST.get('action')
-        
+
         if action == 'signup':
-            username = request.POST.get('username')
+            full_name = request.POST.get('full_name') or request.POST.get('username')
             email = request.POST.get('email')
+            phone = request.POST.get('phone', '')
             password = request.POST.get('password')
-            
-            if User.objects.filter(username=username).exists():
-                messages.error(request, "Username already exists")
+
+            validation_errors = validate_signup_payload(full_name, email, phone, password)
+            if validation_errors:
+                for error in validation_errors:
+                    messages.error(request, error)
                 return redirect('login')
-                
-            if User.objects.filter(email=email).exists():
-                messages.error(request, "Email already registered")
+
+            try:
+                create_user(full_name, email, phone, password)
+            except MongoAuthError as exc:
+                messages.error(request, str(exc))
                 return redirect('login')
-                
-            user = User.objects.create_user(username=username, email=email, password=password)
-            user.is_verified = False
-            user.save()
-            
-            # Send verification email
-            token = default_token_generator.make_token(user)
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            verify_url = request.build_absolute_uri(reverse('verify_email', kwargs={'uidb64': uid, 'token': token}))
-            
-            send_mail(
-                'Verify your Email',
-                f'Please click the link below to verify your email:\n\n{verify_url}',
-                settings.EMAIL_HOST_USER if hasattr(settings, 'EMAIL_HOST_USER') else 'noreply@realestate.com',
-                [user.email],
-                fail_silently=False,
-            )
-            
-            messages.success(request, "Account created! Please check your email to verify your account.")
+
+            messages.success(request, "Account created successfully. Please log in with your email and password.")
             return redirect('login')
-            
-        elif action == 'login':
-            username = request.POST.get('username')
+
+        if action == 'login':
+            identifier = request.POST.get('email') or request.POST.get('username')
             password = request.POST.get('password')
-            
-            user = authenticate(request, username=username, password=password)
-            
-            if user is not None:
-                if not user.is_verified:
-                    messages.error(request, "Please verify your email before logging in")
-                    return redirect('login')
-                    
-                auth_login(request, user)
-                return redirect('account')
-            else:
-                messages.error(request, "Invalid username or password")
+
+            if not identifier or not password:
+                messages.error(request, "Email and password are required.")
                 return redirect('login')
+
+            try:
+                user = authenticate_user(identifier, password)
+            except MongoAuthError as exc:
+                messages.error(request, str(exc))
+                return redirect('login')
+
+            if user is None:
+                messages.error(request, "Invalid email or password.")
+                return redirect('login')
+
+            request.session.cycle_key()
+            set_session_user(request, user)
+            messages.success(request, f"Welcome back, {user['full_name']}.")
+            return redirect('dashboard')
+
+        messages.error(request, "Unsupported authentication action.")
+        return redirect('login')
                 
     return render(request, 'Login_Signup.html')
 
 def logout_view(request):
-    auth_logout(request)
+    clear_session_user(request)
+    request.session.flush()
     return redirect('login')
 
 def verify_email(request, uidb64, token):
-    try:
-        uid = force_str(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-
-    if user is not None and default_token_generator.check_token(user, token):
-        user.is_verified = True
-        user.save()
-        messages.success(request, 'Email verified successfully! You can now log in.')
-    else:
-        messages.error(request, 'Verification link is invalid or has expired.')
-        
+    messages.info(request, 'Email verification is no longer required. Please log in.')
     return redirect('login')
 
 def forgot_password(request):
     if request.method == 'POST':
         email = request.POST.get('email')
+        if not email:
+            messages.error(request, "Email is required.")
+            return redirect('forgot_password')
+
         try:
-            user = User.objects.get(email=email)
-            token = default_token_generator.make_token(user)
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            reset_url = request.build_absolute_uri(reverse('reset_password', kwargs={'uidb64': uid, 'token': token}))
-            
-            send_mail(
-                'Password Reset Request',
-                f'Click the link to reset your password:\n\n{reset_url}',
-                settings.EMAIL_HOST_USER if hasattr(settings, 'EMAIL_HOST_USER') else 'noreply@realestate.com',
-                [user.email],
-                fail_silently=False,
-            )
+            reset_token = create_password_reset_token(email)
+            reset_url = _build_password_reset_link(request, email, reset_token)
+
+            try:
+                send_mail(
+                    'Password Reset Request',
+                    f'Click the link below to reset your BrickByte password:\n\n{reset_url}',
+                    settings.EMAIL_HOST_USER or 'noreply@brickbyte.local',
+                    [email],
+                    fail_silently=False,
+                )
+            except Exception as exc:
+                # Keep the flow usable in development even if SMTP is unavailable.
+                messages.warning(request, f"Password reset email could not be sent automatically: {exc}. Use this link: {reset_url}")
+                return redirect('login')
+
             messages.success(request, "A password reset link has been sent to your email.")
             return redirect('login')
-        except User.DoesNotExist:
-            # For security, you might just want to show "Email sent" here too
-            messages.error(request, "No account found with this email.")
+        except MongoAuthError as exc:
+            messages.error(request, str(exc))
             return redirect('forgot_password')
             
     return render(request, 'forgot_password.html')
 
 def reset_password(request, uidb64, token):
     try:
-        uid = force_str(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-
-    if user is not None and default_token_generator.check_token(user, token):
-        if request.method == 'POST':
-            new_password = request.POST.get('password')
-            user.set_password(new_password)
-            user.save()
-            messages.success(request, "Your password has been reset successfully. Please log in.")
-            return redirect('login')
-        return render(request, 'reset_password.html')
-    else:
+        email = urlsafe_base64_decode(uidb64.encode('utf-8')).decode('utf-8')
+    except (BinasciiError, UnicodeDecodeError, ValueError):
         messages.error(request, 'Password reset link is invalid or has expired.')
         return redirect('login')
+
+    if request.method == 'POST':
+        new_password = request.POST.get('password')
+        if not new_password:
+            messages.error(request, 'Password is required.')
+            return render(request, 'reset_password.html')
+
+        try:
+            if not consume_password_reset_token(email, token):
+                messages.error(request, 'Password reset link is invalid or has expired.')
+                return redirect('login')
+            update_password(email, new_password)
+        except MongoAuthError as exc:
+            messages.error(request, str(exc))
+            return render(request, 'reset_password.html')
+
+        messages.success(request, "Your password has been reset successfully. Please log in.")
+        return redirect('login')
+
+    return render(request, 'reset_password.html')
 
 def about_project(request):
     return render(request, 'About_Project.html')
 
-@login_required(login_url='login')
+@mongo_login_required
 def account(request):
-    return render(request, 'account.html')
+    user = request.mongo_user
+
+    if request.method == 'POST':
+        full_name = request.POST.get('full_name') or request.POST.get('username') or user.full_name
+        email = request.POST.get('email') or user.email
+        phone = request.POST.get('phone') or user.phone
+
+        try:
+            updated_user = update_user_profile(user.id, full_name=full_name, email=email, phone=phone)
+            set_session_user(request, updated_user)
+            messages.success(request, 'Profile updated successfully.')
+            user = get_session_user(request)
+        except MongoAuthError as exc:
+            messages.error(request, str(exc))
+
+    return render(request, 'account.html', {'profile': user})
+
+
+@mongo_login_required
+def dashboard(request):
+    """Alias the account page as a dashboard target for login redirects."""
+    return account(request)
 
 def investment_insights(request):
     return render(request, 'Investment_Insights.html')

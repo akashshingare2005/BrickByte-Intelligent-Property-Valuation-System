@@ -13,20 +13,25 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 
+from dotenv import load_dotenv
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load environment variables before any settings are read so secrets stay out of source.
+load_dotenv(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-o$efw6rbfjl3-0r%p&=x)u05ob1_rkg3yk+t1!00%h77rxu*ou'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-o$efw6rbfjl3-0r%p&=x)u05ob1_rkg3yk+t1!00%h77rxu*ou')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host.strip()]
 
 
 # Application definition
@@ -64,12 +69,22 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'customapp.context_processors.mongo_user_context',
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'RealEststeAgent.wsgi.application'
+
+# Keep Django session support without relying on a database-backed auth user.
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+
+# MongoDB Atlas connection values are loaded from .env.
+MONGO_URI = os.getenv('MONGO_URI', '')
+MONGO_DB_NAME = os.getenv('MONGO_DB_NAME', 'BrickByteDB')
+MONGO_USERS_COLLECTION = os.getenv('MONGO_USERS_COLLECTION', 'users')
+MONGO_PASSWORD_RESET_COLLECTION = os.getenv('MONGO_PASSWORD_RESET_COLLECTION', 'password_reset_tokens')
 
 
 # Database
@@ -82,16 +97,13 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'customapp.User'
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-
-EMAIL_HOST_USER = 'prachiwankhade1712@gmail.com'
-EMAIL_HOST_PASSWORD = 'aptr vyfe kzqb zcse'
+# Email settings remain configurable so password reset mail can be sent securely.
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True').lower() == 'true'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
 
 
 # Password validation

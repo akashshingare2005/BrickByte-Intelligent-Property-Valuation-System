@@ -20,6 +20,7 @@ urlpatterns = [
     path('investment-insights/', views.investment_insights, name='investment_insights'),
     path('location-analytics/', views.location_analytics, name='location_analytics'),
     path('api/location-analytics-data/', views.location_analytics_data, name='location_analytics_data'),
+    path('dashboard/', views.dashboard, name='dashboard'),
     path('account/', views.account, name='account'),
     path('contact/', views.contact, name='contact'),
     path('job-list/', views.job_list, name='job_list'),
